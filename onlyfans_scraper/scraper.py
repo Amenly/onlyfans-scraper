@@ -81,11 +81,14 @@ def process_profile(headers, username) -> list:
         return urls
     except:
         print("Error while processing profile")
-        return False
+        return []
 
 
 def process_areas_all(headers, username, model_id) -> list:
     profile_urls = process_profile(headers, username)
+    
+    if len(profile_urls) == 0:
+        return []
 
     pinned_posts_urls = process_pinned_posts(headers, model_id)
     timeline_posts_urls = process_timeline_posts(headers, model_id)
