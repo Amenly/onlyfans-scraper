@@ -204,7 +204,7 @@ def process_prompts():
 
     profiles.print_current_profile()
     headers = auth.make_headers(auth.read_auth())
-    init.print_sign_status(headers)
+    #init.print_sign_status(headers) # Never implemented feat?
 
     result_main_prompt = prompts.main_prompt()
 
