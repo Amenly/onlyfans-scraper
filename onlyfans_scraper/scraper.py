@@ -74,14 +74,21 @@ def process_pinned_posts(headers, model_id):
 
 
 def process_profile(headers, username) -> list:
-    user_profile = profile.scrape_profile(headers, username)
-    urls, info = profile.parse_profile(user_profile)
-    profile.print_profile_info(info)
-    return urls
+    try:
+        user_profile = profile.scrape_profile(headers, username)
+        urls, info = profile.parse_profile(user_profile)
+        profile.print_profile_info(info)
+        return urls
+    except:
+        print("Error while processing profile")
+        return []
 
 
 def process_areas_all(headers, username, model_id) -> list:
     profile_urls = process_profile(headers, username)
+    
+    if len(profile_urls) == 0:
+        return []
 
     pinned_posts_urls = process_pinned_posts(headers, model_id)
     timeline_posts_urls = process_timeline_posts(headers, model_id)
