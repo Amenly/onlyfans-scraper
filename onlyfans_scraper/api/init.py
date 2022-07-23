@@ -13,19 +13,25 @@ from ..constants import initEP
 from ..utils import auth
 
 
-def init_dummy_session(headers):
+def print_sign_status(headers):
     original_id = headers['user-id']
     headers['user-id'] = '0'
     original_x_bc = headers.pop('x-bc')
 
     try:
-        with httpx.Client(http2=True, headers=headers) as c:
-            c.headers.update(auth.create_sign(initEP, headers))
-            r = c.get(initEP, timeout=None)
-            if not r.is_error:
-                print('Status - \033[32mUP\033[0m')
-            else:
-                print('Status - \033[31mDOWN\033[0m')
+        if init_dummy_session(headers):
+            print('Status - \033[32mUP\033[0m')
+        else:
+            print('Status - \033[31mDOWN\033[0m')
     finally:
         headers['user-id'] = original_id
         headers['x-bc'] = original_x_bc
+
+
+def init_dummy_session(headers):
+    with httpx.Client(http2=True, headers=headers) as c:
+        c.headers.update(auth.create_sign(initEP, headers))
+        r = c.get(initEP, timeout=None)
+        if not r.is_error:
+            return True
+        return False
